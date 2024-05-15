@@ -1,36 +1,63 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
+
 - main
-
 pool:
-  vmImage: ubuntu-latest
-strategy:
-  matrix:
-    Python27:
-      python.version: '2.7'
-    Python35:
-      python.version: '3.5'
-    Python36:
-      python.version: '3.6'
-    Python37:
-      python.version: '3.7'
+  name: 'GreenCodeScan'
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+variables:
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  PATH: 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Program Files\\Java\\jdk-21\\bin;C:\\Users\\sansk\\Downloads\\apache-maven-3.9.6\\bin;$PATH'
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+  REPO_PATH: 'C:\\Users\\sansk\\Downloads\\vsts-agent-win-x64-3.238.0\\_work\\1\\s'
+
+  PYTHON_PATH: 'C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
+
+  CAST_HIGHLIGHT_PATH: 'C:\\Users\\sansk\\Downloads\\Highlight-Automation-Command'
+
+  PYTEST_PATH: 'C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\pytest.exe'
+
+  CLIENT_NAME: 'ZF'
+
+stages:
+- stage: CloneRepository
+  displayName: 'Stage 1: Clone Repository'
+  jobs:
+
+  - job: CloneRepository
+    steps:
+    - checkout: self
+    - script: |
+        echo "Client Name: $(CLIENT_NAME)"
+        echo "Repository is cloned to: $(Pipeline.Workspace)/s"
+
+- stage: TrackServerEmissions
+  displayName: 'Stage 2: Track Server Emissions'
+  jobs:
+  - job: TrackServerEmissions
+    steps:
+    - script: |
+        cd $(REPO_PATH)
+        $(PYTHON_PATH) server_emissions.py
+      continueOnError: true
+
+- stage: DynamicCodeAnalysis
+  displayName: 'Stage 4: Dynamic Code Analysis'
+  jobs:
+  - job: DynamicCodeAnalysis
+    steps:
+    - script: |
+        cd $(REPO_PATH)
+        $(PYTHON_PATH) track_emissions.py
+      continueOnError: true
+      env:
+        PYTEST: $(PYTEST_PATH)
+
+
+- stage: UpdateDashboard
+  displayName: 'Stage 5: Update Dashboard'
+  jobs:
+  - job: UpdateDashboard
+    steps:
+    - powershell: |
+        . "C:\Users\sansk\Downloads\vsts-agent-win-x64-3.238.0\_work\1\s\upload_to_sharepoint.ps1"
+      displayName: 'Update SharePoint'
