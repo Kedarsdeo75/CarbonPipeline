@@ -40,6 +40,18 @@ stages:
         $(PYTHON_PATH) server_emissions.py
       continueOnError: true
 
+- stage: GreenITCodeGeneration
+  displayName: 'Stage 3: Energy Efficient Code Generation'
+  jobs:
+  - job: GreenITCodeGeneration
+    steps:
+    - script: |
+        cd $(REPO_PATH)
+        $(PYTHON_PATH) greenit_codegenerate.py
+      continueOnError: true
+      env:
+        PYTEST: $(PYTEST_PATH)
+
 - stage: DynamicCodeAnalysis
   displayName: 'Stage 4: Dynamic Code Analysis'
   jobs:
