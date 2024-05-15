@@ -8,15 +8,15 @@ variables:
 
   PATH: 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0;E:\\Java\\jdk1.8.0_341\\bin;E:\\DevOps\\apache-maven-3.9.6-src\\apache-maven-3.9.6\\apache-maven\\src\\bin;$PATH'
 
-  REPO_PATH: 'C:\\Users\\sansk\\Downloads\\vsts-agent-win-x64-3.238.0\\_work\\1\\s'
+  REPO_PATH: 'E:\\DevOps\\AzureAgent\\vsts-agent-win-x64-3.239.1\\_work\\1\\s'
 
-  PYTHON_PATH: 'C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
+  PYTHON_PATH: 'F:\\python\\python.exe'
 
   CAST_HIGHLIGHT_PATH: 'C:\\Users\\sansk\\Downloads\\Highlight-Automation-Command'
 
-  PYTEST_PATH: 'C:\\Users\\sansk\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\pytest.exe'
+  PYTEST_PATH: 'F:\\python\\Scripts\\pytest.exe'
 
-  CLIENT_NAME: 'ZF'
+  CLIENT_NAME: 'SAMPLE'
 
 stages:
 - stage: CloneRepository
